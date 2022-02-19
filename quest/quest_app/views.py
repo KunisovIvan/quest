@@ -24,26 +24,32 @@ class Home(View):
 
         user = request.user
 
+        # Получаем прогресс команды и уровень, на котором она находится
         progress, is_created = Progress.objects.get_or_create(user=user)
         level = Levels.objects.filter(number_of_level=progress.number_of_level).first()
 
+        # Если команда прошла все уровни, то завершаем для нее квест
         if progress.number_of_level > len(Levels.objects.all()):
             messages.success(request, ' Квест завершен!')
             user_logout(request)
             return redirect('login')
 
+        # Вернет время, которое прошло с начала уровня
         hours, minutes, seconds = check_time(progress)
 
+        # Если команда на уровне больше заданного количества минут, даем первую подсказу
         if minutes > level.min_for_hint1 - 1 and not progress.is_published_hint1:
             progress.is_published_hint1 = True
             progress.save()
             return redirect('home')
 
+        # Если команда на уровне больше заданного количества минут, даем вторую подсказу
         if minutes > level.min_for_hint2 - 1 and not progress.is_published_hint2:
             progress.is_published_hint2 = True
             progress.save()
             return redirect('home')
 
+        # Если команда на уровне больше заданного количества минут или больше часа, завершаем для нее уровень
         if minutes > level.min_for_level_up - 1 or hours > 0:
             level_up(progress, level, user)
             messages.success(request, 'Вы прошли на новый уровень')
@@ -64,6 +70,7 @@ class Home(View):
 
         user = request.user
 
+        # Получаем прогресс команды и уровень, на котором она находится
         progress, is_created = Progress.objects.get_or_create(user=user)
         level = Levels.objects.filter(number_of_level=progress.number_of_level).first()
 
@@ -72,6 +79,7 @@ class Home(View):
         if form_answers.is_valid():
             answer = form_answers.cleaned_data['answers'].lower()
 
+            # Записываем в базу все, что вводит команда
             WriteData.objects.create(user=user, data=answer)
 
             if answer in [x.answer for x in level.answers_for_level.all()]:
@@ -88,6 +96,7 @@ class Home(View):
         if form_codes.is_valid():
             code = form_codes.cleaned_data['codes'].lower()
 
+            # Записываем в базу все, что вводит команда
             WriteData.objects.create(user=user, data=code)
 
             if code in [x.code for x in level.codes_for_level.all()]:
