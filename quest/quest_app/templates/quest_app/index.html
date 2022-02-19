@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>Уровень № {{level.number_of_level}}</h1>
+<h1>{{level.title}}</h1>
+
+<div class="time_on_level">
+    <div id="mins"></div>:<div id="secs"></div>
+</div>
+
+{% if hint1_is_published %}
+<div class="successbox">
+    <div class="successtext">
+        {{level.hint1}}
+    </div>
+</div>
+{% endif %}
+
+{% if hint2_is_published %}
+<div class="successbox">
+    <div class="successtext">
+        {{level.hint2}}
+    </div>
+</div>
+{% endif %}
+
+{% if spoiler_is_published %}
+
+{% if found_codes %}
+<div class="content-text">
+    Найденные коды:
+    {% for code in found_codes %}
+    <div class="content-box">
+        {{code}}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h3>Форма для ввода кодов</h3>
+
+<form method="post" class="level">
+    {% csrf_token %}
+    {{form_codes.as_p}}
+    <button type="submit" class="level"><div class="header__logo">OK</div></button>
+</form>
+
+<div class="content-box">
+    <div class="content-text">
+        {{level.spoiler|linebreaksbr}}
+    </div>
+    {% if level.spoiler_photo %}
+    <img src="{{level.spoiler_photo.url}}" alt="" width="90%">
+    {% endif %}
+</div>
+
+{% else %}
+
+<h3>Введите ответ на загадку</h3>
+<form method="post" class="level">
+    {% csrf_token %}
+    {{form_answers.as_p}}
+    <button type="submit" class="level"><div class="header__logo">OK</div></button>
+
+</form>
+
+<div class="content-box">
+    <div class="content-text">
+        {{level.question|linebreaksbr}}
+    </div>
+    {% if level.question_photo %}
+    <img src="{{level.question_photo.url}}" alt="" width="90%">
+    {% endif %}
+</div>
+
+{% endif %}
+
+<script type="text/javascript">
+    let seconds = "{{seconds}}";
+    let minutes = "{{minutes}}";
+    let hours = "{{hours}}";
+</script>
+
+{% endblock %}
