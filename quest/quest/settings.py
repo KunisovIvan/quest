@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-prk#&1z59beb!$r=m(^jdxqzo&1yu$m%5c2t@!3-zr&2uq3zra
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.108', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['194.67.66.96', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -78,8 +78,12 @@ TEMPLATES = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'quest',
+        'USER': 'quest',
+        'PASSWORD': 'quest',
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
 

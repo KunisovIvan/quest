@@ -1,0 +1,4 @@
+Django==6.0.4
+django-crum==0.7.9
+psycopg2-binary==2.9.11
+Pillow==12.2.0
