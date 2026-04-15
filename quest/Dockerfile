@@ -2,15 +2,9 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    netcat-openbsd \
-    postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY entrypoint.sh /entrypoint.sh
 COPY . .
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["sh", "-c", "sleep 5 && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
