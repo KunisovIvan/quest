@@ -33,17 +33,19 @@
 <div class="intro">
     <div class="container">
         {% if messages %}
+        <div style="padding-top: 20px;">
             {% for message in messages %}
                 {% if message.tags == 'error' %}
-                    <div class="errorbox">
-                        <div class="errortext">{{ message }}</div>
-                    </div>
+                <div class="errorbox">
+                    <div class="errortext">{{ message }}</div>
+                </div>
                 {% else %}
-                    <div class="successbox">
-                        <div class="successtext">{{ message }}</div>
-                    </div>
+                <div class="successbox">
+                    <div class="successtext">{{ message }}</div>
+                </div>
                 {% endif %}
             {% endfor %}
+        </div>
         {% endif %}
 
         {% block content %}
