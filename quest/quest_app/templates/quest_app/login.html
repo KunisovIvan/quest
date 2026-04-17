@@ -2,12 +2,32 @@
 {% load static %}
 
 {% block content %}
-<h3>Авторизация</h3>
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
 
-    <button type="submit"><div class="header__logo">Login</div></button>
-    <a href="{% url 'register' %}" class="register__link"><div class="header__logo">Registration</div></a>
-</form>
+<div class="flex-row" style="align-items: stretch;">
+    <div style="flex: 1;" class="flex-column">
+        <h3 style="text-align: center; font-size: clamp(16px, 4vw, 28px); margin-bottom: 20px;">Авторизация</h3>
+
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </p>
+            {% endfor %}
+
+            <button type="submit" class="btn-register">
+                <div class="header__logo" style="font-size: inherit;">Войти</div>
+            </button>
+
+            <a href="{% url 'register' %}" class="btn-login">
+                <div class="header__logo" style="font-size: inherit;">Регистрация</div>
+            </a>
+        </form>
+    </div>
+    <div style="flex: 1.5;">
+        <img src="{% static 'images/123.png' %}" alt="photo">
+    </div>
+</div>
+
 {% endblock %}

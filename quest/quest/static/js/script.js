@@ -1,39 +1,28 @@
-console.log(hours, minutes, seconds);
-
+// script.js - таймер для уровня
 (function(){
+    const minsDiv = document.getElementById('mins');
+    const secsDiv = document.getElementById('secs');
+    // Переменные seconds, minutes, hours приходят из шаблона (глобальные)
+    let S = window.seconds || 0;
+    let M = window.minutes || 0;
+    let H = window.hours || 0;
 
-const hour = document.getElementById('hour');
-const mins = document.getElementById('mins');
-const secs = document.getElementById('secs');
+    if (!minsDiv || !secsDiv) return; // если нет элементов таймера – выходим
 
-let S = seconds, M = minutes, H = hours;
-
-console.log(H, M, S);
-
-setInterval(function(){
-  //Плюсик перед строкой преобразует его в число
-  S = +S +1;
-  //Если результат меньше 10, прибавляем впереди строку '0'
-  if( S < 10 ) { S = '0' + S;}
-  if( S == 60 ) {
-    location.reload();
-    S = '00';
-    //Как только секунд стало 60, добавляем +1 к минутам
-    M = +M + 1;
-    //Дальше то же самое, что и для секунд
-    if( M < 10 ) { M = '0' + M; }
-    if( M == 60 ) {
-      location.reload();
-      //Как только минут стало 60, добавляем +1 к часам.
-      M = '00';
-      H = +H + 1;
-      if( H < 10 ) { H = '0' + H; }
-    }
-  }
-  secs.innerText = S;
-  mins.innerText = M;
-//  hour.innerText = H;
-  //Тикает всё через одну функцию, раз в секунду.
-},1000);
-
+    setInterval(function(){
+        S = +S + 1;
+        if (S < 10) { S = '0' + S; }
+        if (S == 60) {
+            S = '00';
+            M = +M + 1;
+            if (M < 10) { M = '0' + M; }
+            if (M == 60) {
+                M = '00';
+                H = +H + 1;
+                if (H < 10) { H = '0' + H; }
+            }
+        }
+        minsDiv.innerText = M;
+        secsDiv.innerText = S;
+    }, 1000);
 })();

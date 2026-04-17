@@ -1,11 +1,10 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Квест</title>
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
@@ -14,48 +13,43 @@
 <header class="header">
     <div class="container">
         <div class="header__inner">
-
-                <div class="header__logo"><a href="{% url 'home' %}"><h2>По следам духовных побед</h2></a></div>
+            <div class="header__logo">
+                <a href="{% url 'home' %}">
+                    <h2>По следам духовных побед</h2>
+                </a>
+            </div>
             <nav class="nav">
                 {% if request.user.is_authenticated %}
-                <h3>
-                    <div class="header__logo">{{ user.username }}  |
-                    <a href="{% url 'logout' %}" class="nav__link">Exit</a></div>
-                </h3>
+                    <div class="header__logo">
+                        {{ user.username }} |
+                        <a href="{% url 'logout' %}" class="nav__link">Выход</a>
+                    </div>
                 {% endif %}
             </nav>
-
         </div>
     </div>
 </header>
 
-<center>
 <div class="intro">
-    <div class="container__for">
-
+    <div class="container">
         {% if messages %}
-                    {% for message in messages %}
-                        {% if message.tags == 'error' %}
-                        <div class="errorbox">
-                            <div class="errortext">{{ message }}</div>
-                        </div>
-                        {% else %}
-                            <div class="successbox">
-                            <div class="successtext">{{ message }}</div>
-                        </div>
-                        {% endif%}
-                    {% endfor %}
-        {% endif%}
-
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="errorbox">
+                        <div class="errortext">{{ message }}</div>
+                    </div>
+                {% else %}
+                    <div class="successbox">
+                        <div class="successtext">{{ message }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
 
         {% block content %}
         {% endblock %}
-
-
-
-        </div>
     </div>
-</center>
+</div>
 
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>

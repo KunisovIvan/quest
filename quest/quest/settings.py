@@ -27,10 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['194.67.66.96', 'localhost', '127.0.0.1', 'exit-exists.ru', '0.0.0.0', 'www.exit-exists.ru']
 
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'quest',
         'USER': 'quest',
         'PASSWORD': 'quest',
-        'HOST': 'postgres',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
