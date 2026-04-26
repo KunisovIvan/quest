@@ -2,32 +2,37 @@
 {% load static %}
 
 {% block content %}
-
-<div class="flex-row" style="align-items: stretch;">
-    <div style="flex: 1;" class="flex-column">
-        <h3 style="text-align: center; font-size: clamp(16px, 4vw, 28px); margin-bottom: 20px;">Авторизация</h3>
-
-        <form method="post" class="login-form">
-            {% csrf_token %}
-            {% for field in form %}
-            <p>
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-            </p>
-            {% endfor %}
-
-            <button type="submit" class="btn-register">
-                <div class="header__logo" style="font-size: inherit;">Войти</div>
-            </button>
-
-            <a href="{% url 'register' %}" class="btn-login">
-                <div class="header__logo" style="font-size: inherit;">Регистрация</div>
-            </a>
-        </form>
+<div class="level-header">
+    <div class="level-info">
+        <h1>АВТОРИЗАЦИЯ</h1>
+        <div class="subtitle">Вход в систему картотеки</div>
     </div>
-    <div style="flex: 1.5;">
-        <img src="{% static 'images/123.png' %}" alt="photo">
+    <div class="level-photo">
+        <div class="photo-with-clip">
+            <img src="{% static 'images/123.png' %}" alt="Фото">
+        </div>
     </div>
 </div>
 
+<form method="post" class="auth-form">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    <div class="auth-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+        <small class="auth-help">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+        <div class="auth-error">{{ error }}</div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    
+    <button type="submit" class="auth-button">ВОЙТИ</button>
+    <div class="auth-footer">
+        <a href="{% url 'register' %}">Регистрация</a>
+    </div>
+</form>
 {% endblock %}

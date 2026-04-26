@@ -1,33 +1,35 @@
-// script.js - таймер для уровня
+// script.js - таймер для лампового дисплея (оригинальная логика)
 (function(){
-    const minsDiv = document.getElementById('mins');
-    const secsDiv = document.getElementById('secs');
+    const minsTens = document.getElementById('nixie-minutes-tens');
+    const minsUnits = document.getElementById('nixie-minutes-units');
+    const secsTens = document.getElementById('nixie-seconds-tens');
+    const secsUnits = document.getElementById('nixie-seconds-units');
 
-    // Если элементов нет – выходим
-    if (!minsDiv || !secsDiv) return;
+    if (!minsTens || !minsUnits || !secsTens || !secsUnits) return;
 
-    // Берём начальные значения из текста элементов (уже пришли из шаблона)
-    let M = parseInt(minsDiv.innerText, 10);
-    let S = parseInt(secsDiv.innerText, 10);
+    let minutes = parseInt(minsTens.textContent + minsUnits.textContent, 10);
+    let seconds = parseInt(secsTens.textContent + secsUnits.textContent, 10);
 
-    // Функция форматирования с ведущим нулём
-    function format(num) {
-        return num < 10 ? '0' + num : '' + num;
+    if (isNaN(minutes)) minutes = 0;
+    if (isNaN(seconds)) seconds = 0;
+
+    function updateDisplay() {
+        minsTens.textContent = Math.floor(minutes / 10);
+        minsUnits.textContent = minutes % 10;
+        secsTens.textContent = Math.floor(seconds / 10);
+        secsUnits.textContent = seconds % 10;
     }
 
-    // Показываем форматированные значения сразу
-    minsDiv.innerText = format(M);
-    secsDiv.innerText = format(S);
+    updateDisplay();
 
     setInterval(function(){
-        S = S + 1;
+        seconds = seconds + 1;
 
-        if (S === 60) {
-            location.reload();  // перезагрузка страницы раз в минуту
+        if (seconds === 60) {
+            location.reload();
             return;
         }
 
-        secsDiv.innerText = format(S);
-        minsDiv.innerText = format(M);
+        updateDisplay();
     }, 1000);
 })();

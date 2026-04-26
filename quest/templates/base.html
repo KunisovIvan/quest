@@ -1,58 +1,67 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Квест</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Победа</title>
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="{% static 'images/555.jpg' %}">
 </head>
 <body>
-
-<header class="header">
-    <div class="container">
+    <!-- ХЕДЕР С НАВИГАЦИЕЙ -->
+    <div class="header">
         <div class="header__inner">
             <div class="header__logo">
-                <a href="{% url 'home' %}">
-                    <h2>По следам духовных побед</h2>
-                </a>
+                <a href="{% url 'home' %}">ПО СЛЕДАМ ДУХОВНЫХ ПОБЕД</a>
             </div>
             <nav class="nav">
                 {% if request.user.is_authenticated %}
-                    <div class="header__logo">
-                        {{ user.username }} |
-                        <a href="{% url 'logout' %}" class="nav__link">Выход</a>
+                    <div class="user-info">
+                        <span class="username">{{ user.username|upper }}</span>
+                        <span class="separator">/</span>
+                        <a href="{% url 'logout' %}" class="nav__link">ВЫХОД</a>
                     </div>
                 {% endif %}
             </nav>
         </div>
     </div>
-</header>
 
-<div class="intro">
-    <div class="container">
-        {% if messages %}
-        <div style="padding-top: 20px;">
-            {% for message in messages %}
-                {% if message.tags == 'error' %}
-                <div class="errorbox">
-                    <div class="errortext">{{ message }}</div>
-                </div>
-                {% else %}
-                <div class="successbox">
-                    <div class="successtext">{{ message }}</div>
-                </div>
+    <!-- ОСНОВНАЯ КАРТОЧКА -->
+    <div class="intro">
+        <div class="container">
+            <div class="card">
+                <div class="stamp">СОВ. СЕКРЕТНО</div>
+                <div class="case-number">Дело № А-{{ user.id|default:"000"|stringformat:"03d" }} / Л.д. № {{ user.id|default:"000"|stringformat:"03d" }}</div>
+
+                <!-- БЛОК УВЕДОМЛЕНИЙ -->
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="errorbox">
+                            <div class="errortext">{{ message }}</div>
+                        </div>
+                        {% else %}
+                        <div class="successbox">
+                            <div class="successtext">{{ message }}</div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
-            {% endfor %}
+
+                {% block content %}
+                {% endblock %}
+
+                <div class="footer-note">
+                    Инв. № ________ / Подпись: __________ / <span id="date"></span>
+                </div>
+            </div>
         </div>
-        {% endif %}
-
-        {% block content %}
-        {% endblock %}
     </div>
-</div>
 
-<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.getElementById('date').innerText = new Date().toLocaleDateString('ru-RU');
+    </script>
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

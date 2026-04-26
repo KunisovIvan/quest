@@ -2,100 +2,121 @@
 {% load static %}
 
 {% block content %}
-
-<!-- Верхний блок: h1 слева, фото справа -->
-<div class="flex-row" style="align-items: center;">
-    <div style="flex: 3;" class="flex-column justify-center">
-        <h1 class="adaptive-title">Уровень № {{level.number_of_level}}</h1>
-        <h1 class="adaptive-subtitle">{{level.title}}</h1>
+<div class="level-header">
+    <div class="level-info">
+        <h1>УРОВЕНЬ № {{ level.number_of_level }}</h1>
+        <div class="subtitle">{{ level.title }}</div>
     </div>
-    <div style="flex: 1.2;">
-        <img src="{% static 'images/111.png' %}" alt="photo">
+    <div class="level-photo">
+        <div class="photo-with-clip">
+            <img src="{% static 'images/555.jpg' %}" alt="Фото по умолчанию">
+        </div>
     </div>
 </div>
 
-<!-- Таймер -->
-<div class="time_on_level">
-    <div id="mins">{{ minutes }}</div>:<div id="secs">{{ seconds }}</div>
+<!-- СТЕКЛЯННЫЙ ЛАМПОВЫЙ ТАЙМЕР -->
+<div class="nixie-timer">
+    <div class="wooden-stand"></div>
+    <div class="nixie-group">
+        <div class="nixie-tube">
+            <div class="darkening"></div>
+            <div class="grid"></div>
+            <div class="glow"></div>
+            <div class="glass-bling"></div>
+            <div class="glass-bling-bottom"></div>
+            <div class="bottom-ring"></div>
+            <div class="nixie-digit" id="nixie-minutes-tens">{{ minutes|default:"0"|stringformat:"02d"|slice:":1" }}</div>
+        </div>
+        <div class="nixie-tube">
+            <div class="darkening"></div>
+            <div class="grid"></div>
+            <div class="glow"></div>
+            <div class="glass-bling"></div>
+            <div class="glass-bling-bottom"></div>
+            <div class="bottom-ring"></div>
+            <div class="nixie-digit" id="nixie-minutes-units">{{ minutes|default:"0"|stringformat:"02d"|slice:"1:2" }}</div>
+        </div>
+    </div>
+    <div class="nixie-separator"> </div>
+    <div class="nixie-group">
+        <div class="nixie-tube">
+            <div class="darkening"></div>
+            <div class="grid"></div>
+            <div class="glow"></div>
+            <div class="glass-bling"></div>
+            <div class="glass-bling-bottom"></div>
+            <div class="bottom-ring"></div>
+            <div class="nixie-digit" id="nixie-seconds-tens">{{ seconds|default:"0"|stringformat:"02d"|slice:":1" }}</div>
+        </div>
+        <div class="nixie-tube">
+            <div class="darkening"></div>
+            <div class="grid"></div>
+            <div class="glow"></div>
+            <div class="glass-bling"></div>
+            <div class="glass-bling-bottom"></div>
+            <div class="bottom-ring"></div>
+            <div class="nixie-digit" id="nixie-seconds-units">{{ seconds|default:"0"|stringformat:"02d"|slice:"1:2" }}</div>
+        </div>
+    </div>
 </div>
 
-<!-- Подсказки -->
+<!-- ПОДСКАЗКИ (без скрепок) -->
 {% if hint1_is_published %}
-<div class="successbox">
-    <div class="successtext">
-        {{level.hint1}}
-    </div>
+<div class="hint">
+    {{ level.hint1 }}
 </div>
 {% endif %}
 
 {% if hint2_is_published %}
-<div class="successbox">
-    <div class="successtext">
-        {{level.hint2}}
-    </div>
+<div class="hint">
+    {{ level.hint2 }}
 </div>
 {% endif %}
 
-<!-- Форма и коды -->
+<!-- ФОРМА ВВОДА НАД ЗАГАДКОЙ -->
 {% if spoiler_is_published %}
-
+    <!-- Режим кодов -->
     {% if found_codes %}
-    <h3 style="text-align: center; margin-bottom: 10px;">Найденные коды:</h3>
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div class="codes">
         {% for code in found_codes %}
-        <span class="code-badge">
-            {{code}}
-        </span>
+        <span class="code-badge">{{ code }}</span>
         {% endfor %}
     </div>
     {% endif %}
 
-    <h3 style="text-align: center;">Форма для ввода кодов</h3>
-
-    <form method="post" class="level">
-        {% csrf_token %}
-        {{form_codes.as_p}}
-        <button type="submit" class="level"><div class="header__logo">OK</div></button>
-    </form>
-
-{% else %}
-
-    <h3 style="text-align: center;">Введите ответ на загадку</h3>
-
-    <form method="post" class="level">
-        {% csrf_token %}
-        {{form_answers.as_p}}
-        <button type="submit" class="level"><div class="header__logo">OK</div></button>
-    </form>
-
-{% endif %}
-
-<!-- Блок content-box снизу на всю ширину -->
-{% if spoiler_is_published %}
-<div class="content-box">
-    <div class="content-text">
-        {{level.spoiler|linebreaksbr}}
+    <div class="form-row">
+        <form method="post" style="display: flex; width: 100%; gap: 0;">
+            {% csrf_token %}
+            {{ form_codes.as_p }}
+            <button type="submit">ПРОВЕРИТЬ КОД</button>
+        </form>
     </div>
-    {% if level.spoiler_photo %}
-    <img src="{{level.spoiler_photo.url}}" alt="" width="90%">
-    {% endif %}
-</div>
-{% else %}
-<div class="content-box">
-    <div class="content-text">
-        {{level.question|linebreaksbr}}
+
+    <div class="question-box">
+        {{ level.spoiler|linebreaksbr }}
+        {% if level.spoiler_photo %}
+        <div class="photo-with-clip" style="margin-top: 15px;">
+            <img src="{{ level.spoiler_photo.url }}" alt="Фото">
+        </div>
+        {% endif %}
     </div>
-    {% if level.question_photo %}
-    <img src="{{level.question_photo.url}}" alt="" width="90%">
-    {% endif %}
-</div>
+{% else %}
+    <!-- Режим ответа -->
+    <div class="form-row">
+        <form method="post" style="display: flex; width: 100%; gap: 0;">
+            {% csrf_token %}
+            {{ form_answers.as_p }}
+            <button type="submit">ПРОВЕРИТЬ ОТВЕТ</button>
+        </form>
+    </div>
+
+    <div class="question-box">
+        {{ level.question|linebreaksbr }}
+        {% if level.question_photo %}
+        <div class="photo-with-clip" style="margin-top: 15px;">
+            <img src="{{ level.question_photo.url }}" alt="Фото загадки">
+        </div>
+        {% endif %}
+    </div>
 {% endif %}
-
-<script type="text/javascript">
-    // Переменные для таймера (глобальные)
-    window.seconds = "{{seconds}}";
-    window.minutes = "{{minutes}}";
-    window.hours = "{{hours}}";
-</script>
-
 {% endblock %}
