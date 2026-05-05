@@ -156,7 +156,10 @@ class UserLogin(View):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, f'Добро пожаловать, {user.username}!')
             return redirect('home')
+        else:
+            messages.error(request, 'Неверное имя пользователя или пароль')
         return render(request, self.template_name, {'form': form})
 
 
