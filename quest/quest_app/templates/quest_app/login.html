@@ -14,25 +14,6 @@
     </div>
 </div>
     
-<script>
-    const images = [
-        '1.png',
-        '2.png', 
-        '3.png',
-        '4.png',
-        '5.png',
-        '6.png',
-        '7.png',
-        '8.png',
-        '9.png',
-        '10.png',
-        '11.png',
-        '12.png',
-    ];
-    const randomImage = images[Math.floor(Math.random() * images.length)];
-    document.getElementById('random-photo').src = "{% static 'images/' %}" + randomImage;
-</script>
-    
 <form method="post" class="auth-form">
     {% csrf_token %}
     
